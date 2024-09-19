@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Asegúrate de que la instancia de Sequelize esté exportada
 
-const ReservaAttributes = {
+const Reserva = sequelize.define('Reserva', {
     idReserva: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -17,7 +18,7 @@ const ReservaAttributes = {
     idViaje: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'Viajes',
+            model: 'Viaje',
             key: 'idViaje'
         },
         allowNull: true
@@ -26,15 +27,9 @@ const ReservaAttributes = {
         type: DataTypes.INTEGER,
         allowNull: false
     }
-}
+}, {
+    timestamps: false,
+    freezeTableName: true
+});
 
-const ReservaOptions = {
-    timestamps: false
-}
-
-const ReservaModel = {
-    ReservaAttributes,
-    ReservaOptions
-}
-
-export default ReservaModel;
+export default Reserva;

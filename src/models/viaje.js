@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Asegúrate de que la instancia de Sequelize esté exportada
 
-const ViajeAttributes = {
+const Viaje = sequelize.define('Viaje', {
     idViaje: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -8,13 +9,7 @@ const ViajeAttributes = {
     },
     ciudadOrigen: {
         type: DataTypes.STRING(100),
-        allowNull: false,
-        validate: {
-            notEmpty: {
-                args: true,
-                msg: "La ciudad de origen es necesaria"
-            }
-        }
+        allowNull: false
     },
     ciudadDestino: {
         type: DataTypes.STRING(100),
@@ -32,17 +27,25 @@ const ViajeAttributes = {
         type: DataTypes.FLOAT,
         allowNull: false
     },
-    conductor: {
-        type: DataTypes.STRING(100),
-        allowNull: false
+    idConductor: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Usuario',
+            key: 'idUsuario'
+        },
+        allowNull: true
     },
     pasajeros: {
         type: DataTypes.INTEGER,
-        allowNull: true
-    },
-    vehiculo: {
-        type: DataTypes.STRING(100),
         allowNull: false
+    },
+    idVehiculo: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Vehiculo',
+            key: 'idVehiculo'
+        },
+        allowNull: true 
     },
     fecha: {
         type: DataTypes.STRING(20),
@@ -52,15 +55,9 @@ const ViajeAttributes = {
         type: DataTypes.STRING(20),
         allowNull: true
     }
-}
+}, {
+    timestamps: false,
+    freezeTableName: true
+});
 
-const ViajeOptions = {
-    timestamps: false
-}
-
-const ViajeModel = {
-    ViajeAttributes,
-    ViajeOptions
-}
-
-export default ViajeModel;
+export default Viaje;

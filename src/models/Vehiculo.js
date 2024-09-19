@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Asegúrate de que la instancia de Sequelize esté exportada
 
-const VehiculoAttributes = {
+const Vehiculo = sequelize.define('Vehiculo', {
     idVehiculo: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -30,16 +31,11 @@ const VehiculoAttributes = {
         type: DataTypes.STRING(20),
         unique: true,
         allowNull: false
-    },
-}
+    }
+}, {
+    timestamps: false,
+    freezeTableName: true
+});
 
-const VehiculoOptions = {
-    timestamps: false
-}
+export default Vehiculo;
 
-const VehiculoModel = {
-    VehiculoAttributes,
-    VehiculoOptions
-}
-
-export default VehiculoModel;

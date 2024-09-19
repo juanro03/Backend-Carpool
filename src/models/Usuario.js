@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Asegúrate de que la instancia de Sequelize esté exportada
 
-const UsuarioAttributes = {
+const Usuario = sequelize.define('Usuario', {
     idUsuario: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -8,24 +9,12 @@ const UsuarioAttributes = {
     },
     nombre: {
         type: DataTypes.STRING(100),
-        allowNull: false,
-        validate: {
-            notEmpty: {
-                args: true,
-                msg: "El nombre es necesario"
-            }
-        }
+        allowNull: false
     },
     email: {
         type: DataTypes.STRING(100),
         unique: true,
-        allowNull: false,
-        validate: {
-            isEmail: {
-                args: true,
-                msg: "Debe ser una dirección de correo electrónico válida"
-            }
-        }
+        allowNull: false
     },
     passwordHash: {
         type: DataTypes.STRING,
@@ -35,15 +24,9 @@ const UsuarioAttributes = {
         type: DataTypes.STRING(20),
         allowNull: true
     }
-}
+}, {
+    timestamps: false,
+    freezeTableName: true
+});
 
-const UsuarioOptions = {
-    timestamps: false
-}
-
-const UsuarioModel = {
-    UsuarioAttributes,
-    UsuarioOptions
-}
-
-export default UsuarioModel;
+export default Usuario;

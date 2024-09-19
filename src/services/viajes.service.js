@@ -4,76 +4,62 @@ import { Op } from "sequelize";
 import sequelize from "../models/database.js";
 
 const getViajes = async () => {
-    const resultado = await sequelize.models.Viajes.findAll({
-        attributes: [
-            'idViaje',
-            'ciudadOrigen',
-            'ciudadDestino',
-            'puntosIntermedios',
-            'asientosDisponibles',
-            'precio',
-            'conductor',
-            'pasajeros',
-            'vehiculo',
-            'fecha',
-            'hora'
-        ],
-        order: [['idViaje', 'ASC']]
-    })
-    console.log('resultado', resultado)
-    return resultado.map(viaje => {
-        return {
-            idViaje: viaje.dataValues.idViaje,
-            ciudadOrigen: viaje.dataValues.ciudadOrigen,
-            ciudadDestino: viaje.dataValues.ciudadDestino,
-            puntosIntermedios: viaje.dataValues.puntosIntermedios,
-            asientosDisponibles: viaje.dataValues.asientosDisponibles,
-            precio: viaje.dataValues.precio,
-            conductor: viaje.dataValues.conductor,
-            pasajeros: viaje.dataValues.pasajeros,
-            vehiculo: viaje.dataValues.vehiculo,
-            fecha: viaje.dataValues.fecha,
-            hora: viaje.dataValues.hora
-        }
-    })
-}
+    try {
+        const resultado = await sequelize.models.Viaje.findAll({
+            attributes: [
+                'idViaje',
+                'ciudadOrigen',
+                'ciudadDestino',
+                'puntosIntermedios',
+                'asientosDisponibles',
+                'precio',
+                'idConductor',
+                'pasajeros',
+                'idVehiculo',
+                'fecha',
+                'hora'
+            ],
+            order: [['idViaje', 'ASC']]
+        });
+        console.log('resultado', resultado);
+        return resultado.map(viaje => viaje.dataValues);
+    } catch (error) {
+        console.error('Error en getViajes:', error);
+        throw error;
+    }
+};
 
 const getById = async (id) => {
-    const resultado = await sequelize.models.Viajes.findOne({
-        attributes: [
-            'idViaje',
-            'ciudadOrigen',
-            'ciudadDestino',
-            'puntosIntermedios',
-            'asientosDisponibles',
-            'precio',
-            'conductor',
-            'pasajeros',
-            'vehiculo',
-            'fecha',
-            'hora'
-        ],
-        where: { idViaje: id },
-        order: [['idViaje', 'ASC']]
-    })
-    console.log('resultado', resultado)
-    return {
-        idViaje: resultado.dataValues.idViaje,
-        ciudadOrigen: resultado.dataValues.ciudadOrigen,
-        ciudadDestino: resultado.dataValues.ciudadDestino,
-        puntosIntermedios: resultado.dataValues.puntosIntermedios,
-        asientosDisponibles: resultado.dataValues.asientosDisponibles,
-        precio: resultado.dataValues.precio,
-        conductor: resultado.dataValues.conductor,
-        pasajeros: resultado.dataValues.pasajeros,
-        vehiculo: resultado.dataValues.vehiculo,
-        fecha: resultado.dataValues.fecha,
-        hora: resultado.dataValues.hora
-    };
-}
+    try {
+        const resultado = await sequelize.models.Viaje.findOne({
+            attributes: [
+                'idViaje',
+                'ciudadOrigen',
+                'ciudadDestino',
+                'puntosIntermedios',
+                'asientosDisponibles',
+                'precio',
+                'idConductor',
+                'pasajeros',
+                'idVehiculo',
+                'fecha',
+                'hora'
+            ],
+            where: { idViaje: id },
+            order: [['idViaje', 'ASC']]
+        });
+        if (!resultado) throw new Error('Viaje no encontrado');
+        console.log('resultado', resultado);
+        return resultado.dataValues;
+    } catch (error) {
+        console.error('Error en getById:', error);
+        throw error;
+    }
+};
+
 
 const getByFecha = async (fecha) => {
-    const resultado = await sequelize.models.Viajes.findAll({
+    const resultado = await sequelize.models.Viaje.findAll({
         attributes: [
             'idViaje',
             'ciudadOrigen',
@@ -81,9 +67,9 @@ const getByFecha = async (fecha) => {
             'puntosIntermedios',
             'asientosDisponibles',
             'precio',
-            'conductor',
+            'idConductor',
             'pasajeros',
-            'vehiculo',
+            'idVehiculo',
             'fecha',
             'hora'
         ],
@@ -99,9 +85,9 @@ const getByFecha = async (fecha) => {
             puntosIntermedios: viaje.dataValues.puntosIntermedios,
             asientosDisponibles: viaje.dataValues.asientosDisponibles,
             precio: viaje.dataValues.precio,
-            conductor: viaje.dataValues.conductor,
+            idConductor: viaje.dataValues.idConductor,
             pasajeros: viaje.dataValues.pasajeros,
-            vehiculo: viaje.dataValues.vehiculo,
+            idVehiculo: viaje.dataValues.idVehiculo,
             fecha: viaje.dataValues.fecha,
             hora: viaje.dataValues.hora
         }
@@ -110,15 +96,15 @@ const getByFecha = async (fecha) => {
 
 const postViaje = async (viajeCmd) => {
     console.log(viajeCmd)
-    const resultado = await sequelize.models.Viajes.create({
+    const resultado = await sequelize.models.Viaje.create({
         ciudadOrigen: viajeCmd.ciudadOrigen,
         ciudadDestino: viajeCmd.ciudadDestino,
         puntosIntermedios: viajeCmd.puntosIntermedios,
         asientosDisponibles: viajeCmd.asientosDisponibles,
         precio: viajeCmd.precio,
-        conductor: viajeCmd.conductor,
+        idConductor: viajeCmd.idConductor,
         pasajeros: viajeCmd.pasajeros,
-        vehiculo: viajeCmd.vehiculo,
+        idVehiculo: viajeCmd.idVehiculo,
         fecha: viajeCmd.fecha,
         hora: viajeCmd.hora
     })
@@ -127,21 +113,24 @@ const postViaje = async (viajeCmd) => {
         ciudadOrigen: resultado.dataValues.ciudadOrigen,
         ciudadDestino: resultado.dataValues.ciudadDestino,
         puntosIntermedios: resultado.dataValues.puntosIntermedios,
+        asientosDisponibles: resultado.dataValues.asientosDisponibles,
         precio: resultado.dataValues.precio,
-        conductor: resultado.dataValues.conductor,
+        idConductor: resultado.dataValues.idConductor,
+        pasajeros: resultado.dataValues.pasajeros,
+        idVehiculo: resultado.dataValues.idVehiculo,
         fecha: resultado.dataValues.fecha,
         hora: resultado.dataValues.hora
     };
 }
 
 const deleteViaje = async (viajeCmd) => {
-    const viaje = await sequelize.models.Viajes.findOne({
+    const viaje = await sequelize.models.Viaje.findOne({
         where: { idViaje: viajeCmd.idViaje},
     });
 
     if(!viaje){throw console.log("Auto no encontrado");}
 
-    const deleteCount = await sequelize.models.Viajes.destroy({
+    const deleteCount = await sequelize.models.Viaje.destroy({
         where: { idViaje: viajeCmd.idViaje},
     });
       
