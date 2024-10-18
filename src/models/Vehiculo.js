@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database.js'; // Asegúrate de que la instancia de Sequelize esté exportada
+import sequelize from './database.js'; 
 
 const Vehiculo = sequelize.define('Vehiculo', {
     idVehiculo: {

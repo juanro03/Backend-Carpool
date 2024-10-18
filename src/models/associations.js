@@ -4,7 +4,6 @@ import Viaje from './Viaje.js';
 import Reserva from './Reserva.js';
 
 // Relaciones entre modelos
-
 // Usuario y Vehiculo (uno a uno opcional)
 Usuario.hasOne(Vehiculo, {
     foreignKey: 'idUsuario',
